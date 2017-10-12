@@ -17,11 +17,10 @@
 /*
  * Global Defitions
  */
-#define NUMBER_OF_TESTS 100
-#define NUMBER_OF_HUNTERS 10
-
-#define NUMBER_OF_ROWS 6
-#define NUMBER_OF_COLUMS 10
+#define NUMBER_OF_TESTS 2       /*TODO: This value should be 100*/
+#define NUMBER_OF_HUNTERS 10    /*TODO: This value should be 10*/
+#define NUMBER_OF_ROWS 2        /*TODO: This value should be XX*/
+#define NUMBER_OF_COLUMS 3      /*TODO: This value should be XX*/
 
 /*
  * Constructor
@@ -55,12 +54,7 @@ ResultStruct_t *DuckShootingTest::Core()
 
     uint32_t numberOfTests = NUMBER_OF_TESTS;
     uint32_t numberOfHunters = NUMBER_OF_HUNTERS;
-
-    // lam = linspace( 3 , 8 , 31 );
-    // p   = linspace( 0.05 , 0.95 , 31 );
-
-    // res = zeros( numel(lam) , numel(p) );
-
+    
     std::vector<double> &lam = std::vector<double>(NUMBER_OF_ROWS);
     std::vector<double> &p = std::vector<double>(NUMBER_OF_COLUMS);
     std::vector<std::vector<double>> &resultMatrix = std::vector<std::vector<double>>(lam.size(), vector<double>(p.size()));
@@ -80,15 +74,63 @@ ResultStruct_t *DuckShootingTest::Core()
     Utility::DisplayMatrix(resultStruct->ResultMatrix);
 #endif
 
+    for (int kk = 0; kk < lam.size(); ++kk) { /* NOTE: Rows' of resultMatrix*/ /*TODO: Change this with resultMatrix[0].Size()*/
+        for (int ll = 0; ll < p.size(); ++ll) { /* NOTE: Columns' of resultMatrix*/ /*TODO: Change this with resultMatrix column size*/
+            std::vector<double> &numberOfTests = std::vector<double>(NUMBER_OF_TESTS);
+
+            /* TODO: Delete This */
+#ifdef PRINT_INFOS
+            if (kk == 0 && ll == 0) {
+                std::cout << "Created Number Of Tests Vector: " << std::endl;
+                std::cout << "Size: " << numberOfTests.size() << std::endl;
+                std::cout << std::endl;
+                //Utility::DisplayVector(numberOfTests);
+            }
+#endif
+            for (int mm = 0; mm < numberOfTests.size(); ++mm) {
+
+                //             tmp = -99 * ones( poissrnd( lam(kk) ) , noHunters );
+                
+                if (!PoissonRandom(lam[kk])) {
+#ifdef PRINT_INFOS
+                    std::cout << "Vector not created for lam[" <<
+                        kk << "], " << "p[" << ll << "], " << "numberOfTests[" << mm << "]" << std::endl;
+#endif
+                    numberOfTests[mm] = 0.0;
+                }
+                else {
+                    std::vector<double> &temp = std::vector<double>(NUMBER_OF_HUNTERS);
+                    for (int i = 0; i < temp.size(); ++i)
+                        temp[i] = -99.0;
+#ifdef PRINT_INFOS
+                        std::cout << "Created temp Vector for lam[" <<
+                            kk << "], " << "p[" << ll << "], " << "numberOfTests[" << mm << "]" << std::endl;
+                        Utility::DisplayVector(temp);
+#endif
+    //                 targets = randi( size(tmp,1) , noHunters , 1 ); /*NOTE: row vector */
+    // For example, randi(10,3,4) returns a 3-by-4 array of pseudorandom integers between 1 and 10.
+                        std::vector<std::vector<double>> &targets = randi(temp.size(), NUMBER_OF_HUNTERS, 1);
+                        for (int nn = 0; nn < temp.size(); ++nn) {
+
+                        }
+    //                 for nn = 1:size(tmp,1)
+    //                     number = numel( find( targets == nn ) );
+    //                     if number > 0
+    //                         tmp(nn,1:number) = rand(1,number);
+    //                     end
+    //                     clear number;
+    //                 end % for nn
+    //                 clear targets;
+                }
+
+            }
+        }
+    }
     // for kk = 1:size(res,1)
     //     for ll = 1:size(res,2)
-    //         tests = zeros( 1 , noTests );
     //         for mm = 1:noTests
-            
-    //             tmp = -99 * ones( poissrnd( lam(kk) ) , noHunters );
-                
+
     //             if isempty(tmp)
-    //                 tests(mm) = 0;
     //             else
     //                 targets = randi( size(tmp,1) , noHunters , 1 );
     //                 for nn = 1:size(tmp,1)
@@ -130,6 +172,19 @@ ResultStruct_t *DuckShootingTest::Core()
     // obj.lam = lam;
     // obj.p   = p;
     // obj.res = res;
+}
+
+bool DuckShootingTest::PoissonRandom(double)
+{
+     /* TODO: Implement this method same way with poissrnd( lam(kk) ) */
+    return true;
+}
+
+std::vector<std::vector<double>> &DuckShootingTest::randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns)
+{
+    /* TODO: Implement this method same way with randi( size(tmp,1) , noHunters , 1 ) */
+    std::vector<std::vector<double>> &randomMatrix = std::vector<std::vector<double>>(numOfRows, vector<double>(numOfColmns));
+    return randomMatrix;
 }
 
 // classdef duck_shooting_test < ee_solns_demos.testers.GenericTester

@@ -40,8 +40,7 @@ Utility::~Utility()
  */
 void Utility::DisplayVector(std::vector<double> &vectorToBeDisplayed)
 {
-    std::cout << std::endl;
-    std::cout << "A " << vectorToBeDisplayed.size() << " vector will be displayed" << std::endl;
+    std::cout << "Size: " << vectorToBeDisplayed.size() << std::endl;
     for (uint32_t i = 0; i < vectorToBeDisplayed.size(); ++i)
         std::cout << vectorToBeDisplayed[i] << " ";
     std::cout << std::endl;

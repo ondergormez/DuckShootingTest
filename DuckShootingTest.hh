@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Önder Görmez
+ * Copyright (C) 2017 Önder Görmez
 
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your 
@@ -58,6 +58,8 @@ private:
 public:
     DuckShootingTest();
     ~DuckShootingTest();
+    bool PoissonRandom(double);
+    std::vector<std::vector<double>> &randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns);
 };
 
 #endif /* __DUCK_SHOOTING_TEST__HH__ */
