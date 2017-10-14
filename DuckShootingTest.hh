@@ -59,7 +59,8 @@ public:
     DuckShootingTest();
     ~DuckShootingTest();
     bool PoissonRandom(double);
-    std::vector<std::vector<double>> &randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns);
+    std::vector<std::vector<double>> randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns);
+    uint32_t findNumberOfEqualIndexes(std::vector<std::vector<double>> &targets, uint32_t nn);
 };
 
 #endif /* __DUCK_SHOOTING_TEST__HH__ */

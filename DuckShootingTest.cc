@@ -111,7 +111,7 @@ ResultStruct_t *DuckShootingTest::Core()
     // For example, randi(10,3,4) returns a 3-by-4 array of pseudorandom integers between 1 and 10.
                         std::vector<std::vector<double>> &targets = randi(temp.size(), NUMBER_OF_HUNTERS, 1);
                         for (int nn = 0; nn < temp.size(); ++nn) {
-
+                            uint32_t numberOfEqualIndex = findNumberOfEqualIndexes(targets, nn);
                         }
     //                 for nn = 1:size(tmp,1)
     //                     number = numel( find( targets == nn ) );
@@ -180,11 +180,27 @@ bool DuckShootingTest::PoissonRandom(double)
     return true;
 }
 
-std::vector<std::vector<double>> &DuckShootingTest::randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns)
+std::vector<std::vector<double>> DuckShootingTest::randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns)
 {
     /* TODO: Implement this method same way with randi( size(tmp,1) , noHunters , 1 ) */
     std::vector<std::vector<double>> &randomMatrix = std::vector<std::vector<double>>(numOfRows, vector<double>(numOfColmns));
     return randomMatrix;
+}
+
+uint32_t DuckShootingTest::findNumberOfEqualIndexes(std::vector<std::vector<double>> &targets, uint32_t nn)
+{
+    /* TODO: Correct this method*/
+    uint32_t count = 0;
+
+    for (int i = 0; i < NUMBER_OF_HUNTERS; ++i) { /* TODO: Correct this with rows of matrix */
+        for (int j = 0; j < targets[0].size(); ++j) {
+            if (targets[i][j] == nn) {
+                ++count;
+            }
+        }
+    }
+
+    return count;
 }
 
 // classdef duck_shooting_test < ee_solns_demos.testers.GenericTester
