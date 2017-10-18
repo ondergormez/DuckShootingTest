@@ -20,8 +20,6 @@
 #include <iostream>
 #include <vector>
 
-#define PRINT_INFOS
-
 using namespace std;
 
 /*

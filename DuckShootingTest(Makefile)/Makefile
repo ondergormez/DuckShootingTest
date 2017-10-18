@@ -20,6 +20,7 @@ CC       := gcc
 AR       := ar
 RM       := rm -f
 
+# Add this flag to CPPFLAGS, for release optimization "-D NDEBUG"
 CPPFLAGS := -std=c++11 -I$(INCLUDES_DIR) -I$(UTILITY_INC_DIR) -w
     
 SRCS_CPP =  $(ROOT)main.cc \

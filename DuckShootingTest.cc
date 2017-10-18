@@ -61,7 +61,7 @@ ResultStruct_t *DuckShootingTest::Core()
     ResultStruct *resultStruct = new ResultStruct(lam, p, resultMatrix);
     
     /* TODO: Delete This */
-#ifdef PRINT_INFOS
+#ifndef NDEBUG
     std::cout << "\nDuckShootingTest class instance olusturuldu!\n" << std::endl;
     std::cout << "Number Of Tests: " << NUMBER_OF_TESTS << std::endl;
     std::cout << "Number Of Hunters: " << NUMBER_OF_HUNTERS << std::endl;
@@ -78,7 +78,7 @@ ResultStruct_t *DuckShootingTest::Core()
             numberOfTests = std::vector<double>(NUMBER_OF_TESTS);
 
             /* TODO: Delete This */
-#ifdef PRINT_INFOS
+#ifndef NDEBUG
             if (kk == 0 && ll == 0) {
                 std::cout << "Created Number Of Tests Vector: " << std::endl;
                 std::cout << "Size: " << numberOfTests.size() << std::endl;
@@ -91,7 +91,7 @@ ResultStruct_t *DuckShootingTest::Core()
                 //             tmp = -99 * ones( poissrnd( lam(kk) ) , noHunters );
                 
                 if (!PoissonRandom(lam[kk])) {
-#ifdef PRINT_INFOS
+#ifndef NDEBUG
                     std::cout << "Vector not created for lam[" <<
                         kk << "], " << "p[" << ll << "], " << "numberOfTests[" << mm << "]" << std::endl;
 #endif
@@ -101,7 +101,7 @@ ResultStruct_t *DuckShootingTest::Core()
                     temp = std::vector<double>(NUMBER_OF_HUNTERS);
                     for (int i = 0; i < temp.size(); ++i)
                         temp[i] = -99.0;
-#ifdef PRINT_INFOS
+#ifndef NDEBUG
                         std::cout << "Created temp Vector for lam[" <<
                             kk << "], " << "p[" << ll << "], " << "numberOfTests[" << mm << "]" << std::endl;
                         Utility::DisplayVector(temp);
@@ -163,9 +163,9 @@ ResultStruct_t *DuckShootingTest::Core()
     //resultStruct->Lam = lam;
     //resultStruct->P = p;
     //resultStruct->ResultMatrix = resultMatrix;
-
+#ifndef NDEBUG
     Utility::DisplayMatrix(resultStruct->ResultMatrix);
-
+#endif
     return resultStruct;
 
     // obj.lam = lam;
