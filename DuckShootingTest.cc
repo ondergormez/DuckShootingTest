@@ -12,8 +12,10 @@
 
  * For any questions, please contact me @ ondergormez@gmail.com.
  */
+
+#include "Utility.hh"
 #include "DuckShootingTest.hh"
-#include "Utility\inc\Utility.hh"
+
 /*
  * Global Defitions
  */
@@ -51,21 +53,18 @@ ResultStruct_t *DuckShootingTest::Core()
 
     // format long e
     // rng('shuffle','twister')
-
-    uint32_t numberOfTests = NUMBER_OF_TESTS;
-    uint32_t numberOfHunters = NUMBER_OF_HUNTERS;
     
-    std::vector<double> &lam = std::vector<double>(NUMBER_OF_ROWS);
-    std::vector<double> &p = std::vector<double>(NUMBER_OF_COLUMS);
-    std::vector<std::vector<double>> &resultMatrix = std::vector<std::vector<double>>(lam.size(), vector<double>(p.size()));
+    lam = std::vector<double>(NUMBER_OF_ROWS);
+    p = std::vector<double>(NUMBER_OF_COLUMS);
+    resultMatrix = std::vector<std::vector<double>>(lam.size(), vector<double>(p.size()));
     
     ResultStruct *resultStruct = new ResultStruct(lam, p, resultMatrix);
     
     /* TODO: Delete This */
 #ifdef PRINT_INFOS
     std::cout << "\nDuckShootingTest class instance olusturuldu!\n" << std::endl;
-    std::cout << "Number Of Tests: " << numberOfTests << std::endl;
-    std::cout << "Number Of Hunters: " << numberOfHunters << std::endl;
+    std::cout << "Number Of Tests: " << NUMBER_OF_TESTS << std::endl;
+    std::cout << "Number Of Hunters: " << NUMBER_OF_HUNTERS << std::endl;
     std::cout << "Number Of Rows: " << lam.size() << std::endl;
     std::cout << "Number Of Colums: " << p.size() << std::endl;
 
@@ -76,7 +75,7 @@ ResultStruct_t *DuckShootingTest::Core()
 
     for (int kk = 0; kk < lam.size(); ++kk) { /* NOTE: Rows' of resultMatrix*/ /*TODO: Change this with resultMatrix[0].Size()*/
         for (int ll = 0; ll < p.size(); ++ll) { /* NOTE: Columns' of resultMatrix*/ /*TODO: Change this with resultMatrix column size*/
-            std::vector<double> &numberOfTests = std::vector<double>(NUMBER_OF_TESTS);
+            numberOfTests = std::vector<double>(NUMBER_OF_TESTS);
 
             /* TODO: Delete This */
 #ifdef PRINT_INFOS
@@ -84,7 +83,7 @@ ResultStruct_t *DuckShootingTest::Core()
                 std::cout << "Created Number Of Tests Vector: " << std::endl;
                 std::cout << "Size: " << numberOfTests.size() << std::endl;
                 std::cout << std::endl;
-                //Utility::DisplayVector(numberOfTests);
+                Utility::DisplayVector(numberOfTests);
             }
 #endif
             for (int mm = 0; mm < numberOfTests.size(); ++mm) {
@@ -99,7 +98,7 @@ ResultStruct_t *DuckShootingTest::Core()
                     numberOfTests[mm] = 0.0;
                 }
                 else {
-                    std::vector<double> &temp = std::vector<double>(NUMBER_OF_HUNTERS);
+                    temp = std::vector<double>(NUMBER_OF_HUNTERS);
                     for (int i = 0; i < temp.size(); ++i)
                         temp[i] = -99.0;
 #ifdef PRINT_INFOS
@@ -109,7 +108,7 @@ ResultStruct_t *DuckShootingTest::Core()
 #endif
     //                 targets = randi( size(tmp,1) , noHunters , 1 ); /*NOTE: row vector */
     // For example, randi(10,3,4) returns a 3-by-4 array of pseudorandom integers between 1 and 10.
-                        std::vector<std::vector<double>> &targets = randi(temp.size(), NUMBER_OF_HUNTERS, 1);
+                        targets = randi(temp.size(), NUMBER_OF_HUNTERS, 1);
                         for (int nn = 0; nn < temp.size(); ++nn) {
                             uint32_t numberOfEqualIndex = findNumberOfEqualIndexes(targets, nn);
                         }
@@ -165,7 +164,7 @@ ResultStruct_t *DuckShootingTest::Core()
     //resultStruct->P = p;
     //resultStruct->ResultMatrix = resultMatrix;
 
-    //Utility::DisplayMatrix(resultStruct->ResultMatrix);
+    Utility::DisplayMatrix(resultStruct->ResultMatrix);
 
     return resultStruct;
 
@@ -183,7 +182,7 @@ bool DuckShootingTest::PoissonRandom(double)
 std::vector<std::vector<double>> DuckShootingTest::randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns)
 {
     /* TODO: Implement this method same way with randi( size(tmp,1) , noHunters , 1 ) */
-    std::vector<std::vector<double>> &randomMatrix = std::vector<std::vector<double>>(numOfRows, vector<double>(numOfColmns));
+    randomMatrix = std::vector<std::vector<double>>(numOfRows, vector<double>(numOfColmns));
     return randomMatrix;
 }
 

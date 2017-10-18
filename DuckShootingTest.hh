@@ -54,7 +54,13 @@ class DuckShootingTest
 {
 private:
     ResultStruct_t *Core();
-
+    std::vector<double> temp;
+    std::vector<double> lam;
+    std::vector<double> p;
+    std::vector<std::vector<double>> resultMatrix;
+    std::vector<double> numberOfTests;
+    std::vector<std::vector<double>> targets;
+    std::vector<std::vector<double>> randomMatrix;
 public:
     DuckShootingTest();
     ~DuckShootingTest();

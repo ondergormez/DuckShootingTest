@@ -1,4 +1,4 @@
-#include "..\inc\prng_uniform.hh"
+#include "prng_uniform.hh"
 
 namespace os_prng_tests
 {

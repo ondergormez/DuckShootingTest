@@ -1,11 +1,11 @@
-﻿/*
+/*
  * Kuş sayısı değişken olacak
  * Hunter sayısı sabit olacak
  *
  */
 #include <stdio.h>
-#include "Utility\inc\prng_uniform.hh"
 #include "DuckShootingTest.hh"
+#include "prng_uniform.hh"
 
 using namespace os_prng_tests::in_progress;
 
@@ -23,6 +23,6 @@ int main(void)
     
 
     //PRNG_Uniform instance = new PRNG_Uniform();
-    
+    //std::getchar(); // Wait until any key pressed
     return 0;
 }

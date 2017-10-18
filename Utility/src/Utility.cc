@@ -13,7 +13,7 @@
  * For any questions, please contact me @ ondergormez@gmail.com.
  */
 
-#include "..\inc\Utility.hh"
+#include "Utility.hh"
 
 /*
  * Global Defitions

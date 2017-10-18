@@ -9,6 +9,8 @@
 
 #define USE_SHARED_PTR_FOR_DISTRIBUTION
 
+using namespace std;
+
 namespace os_prng_tests
 {
 namespace in_progress
@@ -41,7 +43,6 @@ public:
   getNumbers
   (unsigned int howMany)
   {
-    using namespace std;
     
     vector<double> *current = new vector<double> ();
     current->clear();
