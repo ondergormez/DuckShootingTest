@@ -64,6 +64,17 @@ void Utility::DisplayMatrix(std::vector<std::vector<double>> &matrixToBeDisplaye
     std::cout << std::endl;
 }
 
+
+vector<double> Utility::linspace(double startNumber, double endNumber, uint32_t nPoints){
+    vector<double> tempLinspace;
+
+    for( uint32_t i = 0 ; i < nPoints ; ++i ){
+        tempLinspace.push_back( startNumber + ( ( i * ( endNumber - startNumber ) / (nPoints-1) ) ) );
+    }
+
+    return(tempLinspace);
+}
+
 // // replacement of a minimal set of functions:
 // void* operator new(std::size_t sz) {
 //     std::printf("global op new called, size = %zu\n",sz);
