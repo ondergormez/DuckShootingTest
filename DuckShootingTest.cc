@@ -15,6 +15,7 @@
 
 #include "Utility.hh"
 #include "DuckShootingTest.hh"
+#include "prng_uniform.hh"
 
 /*
  * Global Defitions
@@ -23,6 +24,7 @@
 #define NUMBER_OF_HUNTERS 10    /*TODO: This value should be 10*/
 #define NUMBER_OF_ROWS 2        /*TODO: This value should be XX*/
 #define NUMBER_OF_COLUMS 3      /*TODO: This value should be XX*/
+using namespace std;
 
 /*
  * Constructor
@@ -53,9 +55,10 @@ ResultStruct_t *DuckShootingTest::Core()
 
     // format long e
     // rng('shuffle','twister')
-    
-    lam = std::vector<double>(NUMBER_OF_ROWS);
-    p = std::vector<double>(NUMBER_OF_COLUMS);
+
+    std::vector<double> lam = std::vector<double>(NUMBER_OF_ROWS);;
+    std::vector<double> p = std::vector<double>(NUMBER_OF_COLUMS);
+
     resultMatrix = std::vector<std::vector<double>>(lam.size(), vector<double>(p.size()));
     
     ResultStruct *resultStruct = new ResultStruct(lam, p, resultMatrix);
@@ -88,30 +91,21 @@ ResultStruct_t *DuckShootingTest::Core()
 #endif
             for (int mm = 0; mm < numberOfTests.size(); ++mm) {
 
-                //             tmp = -99 * ones( poissrnd( lam(kk) ) , noHunters );
-                
-                if (!PoissonRandom(lam[kk])) {
-#ifndef NDEBUG
-                    std::cout << "Vector not created for lam[" <<
-                        kk << "], " << "p[" << ll << "], " << "numberOfTests[" << mm << "]" << std::endl;
-#endif
+
+
+                uint32_t poisResult = PoissonRandom(lam[kk]); 
+                if (!poisResult) {
                     numberOfTests[mm] = 0.0;
                 }
                 else {
-                    temp = std::vector<double>(NUMBER_OF_HUNTERS);
-                    for (int i = 0; i < temp.size(); ++i)
-                        temp[i] = -99.0;
-#ifndef NDEBUG
-                        std::cout << "Created temp Vector for lam[" <<
-                            kk << "], " << "p[" << ll << "], " << "numberOfTests[" << mm << "]" << std::endl;
-                        Utility::DisplayVector(temp);
-#endif
-    //                 targets = randi( size(tmp,1) , noHunters , 1 ); /*NOTE: row vector */
-    // For example, randi(10,3,4) returns a 3-by-4 array of pseudorandom integers between 1 and 10.
-                        targets = randi(temp.size(), NUMBER_OF_HUNTERS, 1);
+
+                    std::vector<std::vector<double>> temp = MatrixFillWith(30, 20, -99.0); /* TODO: Correct this */
+                    for (int i = 0; i < temp.size(); ++i) {
+                        std::vector<std::vector<double>> targets = randi(temp.size(), NUMBER_OF_HUNTERS, 1);
                         for (int nn = 0; nn < temp.size(); ++nn) {
                             uint32_t numberOfEqualIndex = findNumberOfEqualIndexes(targets, nn);
-                        }
+                        }                        
+                    }
     //                 for nn = 1:size(tmp,1)
     //                     number = numel( find( targets == nn ) );
     //                     if number > 0
@@ -179,10 +173,40 @@ bool DuckShootingTest::PoissonRandom(double)
     return true;
 }
 
+std::vector<std::vector<double>> DuckShootingTest::MatrixFillWith(uint32_t numOfRows, uint32_t numOfColmns, double filledWith)
+{
+    vector< double > tempRow;
+    vector< vector<double> > onesVector;
+
+    for( int i = 0 ; i < numOfColmns ; ++i){
+        tempRow.push_back(filledWith);
+    }
+
+    for( int j = 0 ; j < numOfRows ; ++j){
+        onesVector.push_back(tempRow);
+    }
+
+    return onesVector;
+}
+
 std::vector<std::vector<double>> DuckShootingTest::randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns)
 {
-    /* TODO: Implement this method same way with randi( size(tmp,1) , noHunters , 1 ) */
-    randomMatrix = std::vector<std::vector<double>>(numOfRows, vector<double>(numOfColmns));
+    using namespace os_prng_tests::in_progress;
+
+    vector<vector<double>> randomMatrix;
+
+    std::vector<double> *tempRow;
+    for (int j = 0; j < numOfRows; ++j) {
+        tempRow = PRNG_Uniform::getNumbers(numOfColmns);
+
+        for (int k = 0; k < (*tempRow).size(); ++k)
+            (*tempRow)[k] *= numberRange;
+
+        randomMatrix.push_back(*tempRow);
+    }
+#ifndef NDEBUG
+    Utility::DisplayMatrix(randomMatrix);
+#endif                
     return randomMatrix;
 }
 

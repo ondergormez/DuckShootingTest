@@ -78,8 +78,8 @@ p   = linspace( 0.05 , 0.95 , 31 );
 
 res = zeros( numel(lam) , numel(p) );
 
-for kk = 1:size(res,1)
-    for ll = 1:size(res,2)
+for kk = 1:size(res,1) //satir sayisini ifade ediyor
+    for ll = 1:size(res,2) //sutun sayisini ifade ediyor
         tests = zeros( 1 , noTests );
         for mm = 1:noTests
         
@@ -89,7 +89,7 @@ for kk = 1:size(res,1)
                 tests(mm) = 0;
             else
                 targets = randi( size(tmp,1) , noHunters , 1 );
-                for nn = 1:size(tmp,1)
+                for nn = 1:size(tmp,1) //satırların sayısını ifade ediyor
                     number = numel( find( targets == nn ) );
                     if number > 0
                         tmp(nn,1:number) = rand(1,number);
