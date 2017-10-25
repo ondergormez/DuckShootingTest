@@ -24,6 +24,7 @@
 #define NUMBER_OF_HUNTERS 10    /*TODO: This value should be 10*/
 #define NUMBER_OF_ROWS 2        /*TODO: This value should be XX*/
 #define NUMBER_OF_COLUMS 3      /*TODO: This value should be XX*/
+
 using namespace std;
 
 /*
@@ -56,8 +57,8 @@ ResultStruct_t *DuckShootingTest::Core()
     // format long e
     // rng('shuffle','twister')
 
-    std::vector<double> lam = std::vector<double>(NUMBER_OF_ROWS);;
-    std::vector<double> p = std::vector<double>(NUMBER_OF_COLUMS);
+    std::vector<double> lam = Utility::linspace(3.0, 8.0, 31);
+    std::vector<double> p = Utility::linspace(0.05, 0.95, 31);
 
     resultMatrix = std::vector<std::vector<double>>(lam.size(), vector<double>(p.size()));
     
