@@ -46,7 +46,7 @@ public:
     ~Utility();
     static void DisplayVector(std::vector<double> &vectorToBeDisplayed);
     static void DisplayMatrix(std::vector<std::vector<double>> &matrixToBeDisplayed);
-	static vector<double> Utility::linspace(double startNumber, double endNumber, uint32_t nPoints);
+	static vector<double> linspace(double startNumber, double endNumber, uint32_t nPoints);
 };
 
 #endif /* __UTILITY__HH__ */

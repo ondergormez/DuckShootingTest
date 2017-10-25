@@ -61,7 +61,7 @@ public:
     bool PoissonRandom(double);
     std::vector<std::vector<int>> randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns);
     uint32_t findNumberOfEqualIndexes(std::vector<std::vector<int>> &targets, uint32_t nn);
-    std::vector<std::vector<double>> DuckShootingTest::MatrixFillWith(uint32_t numOfRows, uint32_t numOfColmns, double filledWith);
+    std::vector<std::vector<double>> MatrixFillWith(uint32_t numOfRows, uint32_t numOfColmns, double filledWith);
 };
 
 #endif /* __DUCK_SHOOTING_TEST__HH__ */
