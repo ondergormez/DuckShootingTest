@@ -26,6 +26,7 @@
 #define NUMBER_OF_COLUMS 3      /*TODO: This value should be XX*/
 
 using namespace std;
+using namespace os_prng_tests::in_progress;
 
 /*
  * Constructor
@@ -102,10 +103,19 @@ ResultStruct_t *DuckShootingTest::Core()
 
                     std::vector<std::vector<double>> temp = MatrixFillWith(30, 20, -99.0); /* TODO: Correct this */
                     for (int i = 0; i < temp.size(); ++i) {
-                        std::vector<std::vector<double>> targets = randi(temp.size(), NUMBER_OF_HUNTERS, 1);
+                        std::vector<std::vector<int>> targets = randi(temp.size(), NUMBER_OF_HUNTERS, 1);
                         for (int nn = 0; nn < temp.size(); ++nn) {
                             uint32_t numberOfEqualIndex = findNumberOfEqualIndexes(targets, nn);
-                        }                        
+                            if (numberOfEqualIndex) {
+                                vector<double> *tempVector = PRNG_Uniform::getNumbers(numberOfEqualIndex); /* TODO: Correct this usage */
+                                for (uint32_t os = 0; os < numberOfEqualIndex; ++os) {
+                                    temp[nn][os] = (*tempVector)[os]; /* TODO: Find more accurate way */
+                                }
+                            }
+                        }
+#ifndef NDEBUG
+                        Utility::DisplayMatrix(temp);
+#endif                        
                     }
     //                 for nn = 1:size(tmp,1)
     //                     number = numel( find( targets == nn ) );
@@ -190,40 +200,39 @@ std::vector<std::vector<double>> DuckShootingTest::MatrixFillWith(uint32_t numOf
     return onesVector;
 }
 
-std::vector<std::vector<double>> DuckShootingTest::randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns)
+std::vector<std::vector<int>> DuckShootingTest::randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns)
 {
-    using namespace os_prng_tests::in_progress;
+    vector<vector<int>> randomMatrix;
+    std::vector<int> tempRow;
+    std::vector<double> *tempRowDouble;
 
-    vector<vector<double>> randomMatrix;
-
-    std::vector<double> *tempRow;
     for (int j = 0; j < numOfRows; ++j) {
-        tempRow = PRNG_Uniform::getNumbers(numOfColmns);
+        tempRowDouble = PRNG_Uniform::getNumbers(numOfColmns);
 
-        for (int k = 0; k < (*tempRow).size(); ++k)
-            (*tempRow)[k] *= numberRange;
+        for (int k = 0; k < (*tempRowDouble).size(); ++k)
+            (*tempRowDouble)[k] *= numberRange;
 
-        randomMatrix.push_back(*tempRow);
+        for (int k = 0; k < (*tempRowDouble).size(); ++k) {
+            tempRow.push_back((int)(*tempRowDouble)[k]);
+        }
+
+        randomMatrix.push_back(tempRow);
     }
-#ifndef NDEBUG
-    Utility::DisplayMatrix(randomMatrix);
-#endif                
     return randomMatrix;
 }
 
-uint32_t DuckShootingTest::findNumberOfEqualIndexes(std::vector<std::vector<double>> &targets, uint32_t nn)
+uint32_t DuckShootingTest::findNumberOfEqualIndexes(std::vector<std::vector<int>> &targets, uint32_t nn)
 {
-    /* TODO: Correct this method*/
     uint32_t count = 0;
 
-    for (int i = 0; i < NUMBER_OF_HUNTERS; ++i) { /* TODO: Correct this with rows of matrix */
+    for (int i = 0; i < targets.size(); ++i) {
         for (int j = 0; j < targets[0].size(); ++j) {
             if (targets[i][j] == nn) {
                 ++count;
             }
         }
     }
-
+    
     return count;
 }
 
