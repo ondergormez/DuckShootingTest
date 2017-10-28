@@ -19,10 +19,13 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
-// void* operator new(std::size_t sz);
-// void operator delete(void* ptr) noexcept;
+/*
+* Note:
+* In general, avoid putting using directives in header files (*.h)
+* because any file that includes that header will bring everything
+* in the namespace into scope, which can cause name hiding and name
+* collision problems that are very difficult to debug.
+*/
 
 /**
  * <p>
@@ -46,7 +49,7 @@ public:
     ~Utility();
     static void DisplayVector(std::vector<double> &vectorToBeDisplayed);
     static void DisplayMatrix(std::vector<std::vector<double>> &matrixToBeDisplayed);
-	static vector<double> linspace(double startNumber, double endNumber, uint32_t nPoints);
+	static std::vector<double> linspace(double startNumber, double endNumber, uint32_t nPoints);
 };
 
 #endif /* __UTILITY__HH__ */

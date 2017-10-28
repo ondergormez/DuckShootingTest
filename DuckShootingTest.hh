@@ -20,7 +20,13 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
+/*
+* Note:
+* In general, avoid putting using directives in header files (*.h)
+* because any file that includes that header will bring everything
+* in the namespace into scope, which can cause name hiding and name
+* collision problems that are very difficult to debug.
+*/
 
 /*
  * Core Function
@@ -29,12 +35,13 @@ typedef struct ResultStruct {
     std::vector<double> &Lam;
     std::vector<double> &P;
     std::vector<std::vector<double>> &ResultMatrix;
-    ResultStruct(std::vector<double> &lam, std::vector<double> &p, std::vector<std::vector<double>> &resultMatrix) : Lam(lam), P(p), ResultMatrix(resultMatrix)
+    ResultStruct(std::vector<double> &lam,
+                 std::vector<double> &p,
+                 std::vector<std::vector<double>> &resultMatrix)
+                 : Lam(lam), P(p), ResultMatrix(resultMatrix)
     {
     }
 } ResultStruct_t;
-
-
 
 /**
  * <p>
@@ -51,12 +58,11 @@ typedef struct ResultStruct {
 class DuckShootingTest
 {
 private:
-    ResultStruct_t *Core();
-    std::vector<std::vector<double>> resultMatrix;
-    std::vector<double> numberOfTests;
+    uint32_t NumberOfDucks;
+    ResultStruct_t * Core(ResultStruct_t *resultObject);
     
 public:
-    DuckShootingTest();
+    DuckShootingTest(uint32_t numberOfDucks);
     ~DuckShootingTest();
     bool PoissonRandom(double);
     std::vector<std::vector<int>> randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns);

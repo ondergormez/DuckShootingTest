@@ -1,5 +1,5 @@
-#ifndef MY_PRNG_UNIFORM_HH_IN_PROGRESS_
-#define MY_PRNG_UNIFORM_HH_IN_PROGRESS_
+#ifndef __MY_PRNG_UNIFORM_HH_IN_PROGRESS__
+#define __MY_PRNG_UNIFORM_HH_IN_PROGRESS__
 
 #include <chrono>
 #include <random>
@@ -9,79 +9,39 @@
 
 #define USE_SHARED_PTR_FOR_DISTRIBUTION
 
-using namespace std;
+/*
+* Note:
+* In general, avoid putting using directives in header files (*.h)
+* because any file that includes that header will bring everything
+* in the namespace into scope, which can cause name hiding and name
+* collision problems that are very difficult to debug.
+*/
 
 namespace os_prng_tests
 {
-namespace in_progress
-{
-  
-class PRNG_Uniform
-{
-  
-private:
-  static unsigned seed;
-  
-  static std::default_random_engine generator;
-  
-#ifdef USE_SHARED_PTR_FOR_DISTRIBUTION
-  static std::shared_ptr< std::uniform_real_distribution<double> > distribution;
-#else
-  static std::uniform_real_distribution<double> distribution;
-#endif
-  
-private:
-  PRNG_Uniform() {}
-  PRNG_Uniform(const PRNG_Uniform &arg) {}
-  PRNG_Uniform(PRNG_Uniform &arg) {}
-  ~PRNG_Uniform() {}
-  
-public:
-  
-  static
-  std::vector<double> *
-  getNumbers
-  (unsigned int howMany)
-  {
-    
-    vector<double> *current = new vector<double> ();
-    current->clear();
-    for ( unsigned int ii = 0 ; ii < howMany ; ii++ )
+    namespace in_progress
     {
-#ifdef USE_SHARED_PTR_FOR_DISTRIBUTION
-      (*current).push_back( (*distribution)(generator) );
-#else
-      (*current).push_back( distribution(generator) );
-#endif
-    }
-    
-    return current;
-  }
-  
-  static
-  void
-  getNumbers
-  (
-    std::vector<double> & current , 
-    unsigned int          howMany
-  )
-  {
-    using namespace std;
-    
-    current.clear();
-    for ( unsigned int ii = 0 ; ii < howMany ; ii++ )
-    {
-#ifdef USE_SHARED_PTR_FOR_DISTRIBUTION
-      current.push_back( (*distribution)(generator) );
-#else
-      current.push_back( distribution(generator) );
-#endif
-    }
-  }
-  
-};
 
-} // namespace in_progress
-} // namespace os_prng_tests
+        class PRNG_Uniform
+        {
 
+        private:
+            static unsigned seed;
+            static std::default_random_engine generator;
+#ifdef USE_SHARED_PTR_FOR_DISTRIBUTION
+            static std::shared_ptr<std::uniform_real_distribution<double>> distribution;
+#else
+            static std::uniform_real_distribution<double> distribution;
 #endif
+            static void ChangeSeed(void);
+            PRNG_Uniform() {}
+            ~PRNG_Uniform() {}
+
+        public:
+            static std::vector<double> * getNumbers(unsigned int howMany);
+            static void getNumbers(std::vector<double> & current, unsigned int howMany);
+        };
+    }
+}
+
+#endif /* __MY_PRNG_UNIFORM_HH_IN_PROGRESS__ */

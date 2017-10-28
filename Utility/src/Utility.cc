@@ -15,6 +15,7 @@
 
 #include "Utility.hh"
 
+using namespace std;
 /*
  * Global Defitions
  */
@@ -38,30 +39,30 @@ Utility::~Utility()
 /*
  * Display Vector
  */
-void Utility::DisplayVector(std::vector<double> &vectorToBeDisplayed)
+void Utility::DisplayVector(vector<double> &vectorToBeDisplayed)
 {
-    std::cout << "Size: " << vectorToBeDisplayed.size() << std::endl;
+    cout << "Size: " << vectorToBeDisplayed.size() << endl;
     for (uint32_t i = 0; i < vectorToBeDisplayed.size(); ++i)
-        std::cout << vectorToBeDisplayed[i] << " ";
-    std::cout << std::endl;
-    std::cout << std::endl;
+        cout << vectorToBeDisplayed[i] << " ";
+    cout << endl;
+    cout << endl;
 }
 
 /*
  * Display Matrix
  */
-void Utility::DisplayMatrix(std::vector<std::vector<double>> &matrixToBeDisplayed)
+void Utility::DisplayMatrix(vector<vector<double>> &matrixToBeDisplayed)
 {
-    std::cout << "A " << matrixToBeDisplayed.size() << " * " <<
-    matrixToBeDisplayed[0].size() << " matrix will be displayed:" << std::endl;
+    cout << "A " << matrixToBeDisplayed.size() << " * " <<
+    matrixToBeDisplayed[0].size() << " matrix will be displayed:" << endl;
     
     for (uint32_t i = 0; i < matrixToBeDisplayed.size(); ++i) {
         for (uint32_t k = 0; k < matrixToBeDisplayed[i].size(); ++k) {
-            std::cout << matrixToBeDisplayed[i][k] << " ";
+            cout << matrixToBeDisplayed[i][k] << " ";
         }
-        std::cout << std::endl;
+        cout << endl;
     }
-    std::cout << std::endl;
+    cout << endl;
 }
 
 
@@ -74,15 +75,3 @@ vector<double> Utility::linspace(double startNumber, double endNumber, uint32_t 
 
     return(tempLinspace);
 }
-
-// // replacement of a minimal set of functions:
-// void* operator new(std::size_t sz) {
-//     std::printf("global op new called, size = %zu\n",sz);
-//     return std::malloc(sz);
-// }
-
-// void operator delete(void* ptr) noexcept
-// {
-//     std::puts("global op delete called");
-//     std::free(ptr);
-// }

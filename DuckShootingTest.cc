@@ -13,27 +13,28 @@
  * For any questions, please contact me @ ondergormez@gmail.com.
  */
 
-#include "Utility.hh"
 #include "DuckShootingTest.hh"
+#include "Utility.hh"
 #include "prng_uniform.hh"
-
-/*
- * Global Defitions
- */
-#define NUMBER_OF_TESTS 2       /*TODO: This value should be 100*/
-#define NUMBER_OF_HUNTERS 10    /*TODO: This value should be 10*/
-#define NUMBER_OF_ROWS 2        /*TODO: This value should be XX*/
-#define NUMBER_OF_COLUMS 3      /*TODO: This value should be XX*/
 
 using namespace std;
 using namespace os_prng_tests::in_progress;
 
 /*
+ * Global Defitions
+ */
+
+/*
  * Constructor
  */
-DuckShootingTest::DuckShootingTest()
+DuckShootingTest::DuckShootingTest(uint32_t numberOfDucks)
 {
-    Core();                                                                                                             /* TODO: Delete This */
+    NumberOfDucks = numberOfDucks;
+#ifndef NDEBUG
+    cout << "\nDuckShootingTest class instance created!\n" << endl;
+#endif
+    ResultStruct *resultObject = nullptr;                                                                                           /* TODO: Fix this */
+    Core(resultObject);                                                                                                             /* TODO: Put the function call at the right place */
 }
 
 /*
@@ -47,47 +48,35 @@ DuckShootingTest::~DuckShootingTest()
 /*
  * Core Function
  */
-ResultStruct_t *DuckShootingTest::Core()
+ResultStruct_t * DuckShootingTest::Core(ResultStruct_t * resultObject)
 {
-    //     % indentation may not be utilized after this point for convenience.
-    //     % Also avoiding static methods again since I do not want to deal with
-    //     % unnecessary imports.
-        
-    // function core(obj)
+    vector<double> numberOfTests = vector<double>(100);
+    uint32_t numberOfHunters = 10;
 
-    // format long e
-    // rng('shuffle','twister')
+    vector<double> lam = Utility::linspace(3.0, 8.0, 31);
+    vector<double> p = Utility::linspace(0.05, 0.95, 31);
+    vector<vector<double>> resultMatrix = vector<vector<double>>(lam.size(), vector<double>(p.size()));
 
-    std::vector<double> lam = Utility::linspace(3.0, 8.0, 31);
-    std::vector<double> p = Utility::linspace(0.05, 0.95, 31);
-
-    resultMatrix = std::vector<std::vector<double>>(lam.size(), vector<double>(p.size()));
-    
-    ResultStruct *resultStruct = new ResultStruct(lam, p, resultMatrix);
-    
-    /* TODO: Delete This */
 #ifndef NDEBUG
-    std::cout << "\nDuckShootingTest class instance olusturuldu!\n" << std::endl;
-    std::cout << "Number Of Tests: " << NUMBER_OF_TESTS << std::endl;
-    std::cout << "Number Of Hunters: " << NUMBER_OF_HUNTERS << std::endl;
-    std::cout << "Number Of Rows: " << lam.size() << std::endl;
-    std::cout << "Number Of Colums: " << p.size() << std::endl;
+    cout << "Number Of Tests: " << numberOfTests.size() << endl;
+    cout << "Number Of Hunters: " << numberOfHunters << endl;
+    cout << "lam = " << lam.size() << endl;
+    cout << "p = " << p.size() << endl;
 
-    Utility::DisplayVector(resultStruct->Lam);
-    Utility::DisplayVector(resultStruct->P);
-    Utility::DisplayMatrix(resultStruct->ResultMatrix);
+    //Utility::DisplayVector(lam);
+    //Utility::DisplayVector(p);
+    //Utility::DisplayMatrix(resultMatrix);
 #endif
 
     for (int kk = 0; kk < lam.size(); ++kk) { /* NOTE: Rows' of resultMatrix*/ /*TODO: Change this with resultMatrix[0].Size()*/
         for (int ll = 0; ll < p.size(); ++ll) { /* NOTE: Columns' of resultMatrix*/ /*TODO: Change this with resultMatrix column size*/
-            numberOfTests = std::vector<double>(NUMBER_OF_TESTS);
 
             /* TODO: Delete This */
 #ifndef NDEBUG
             if (kk == 0 && ll == 0) {
-                std::cout << "Created Number Of Tests Vector: " << std::endl;
-                std::cout << "Size: " << numberOfTests.size() << std::endl;
-                std::cout << std::endl;
+                cout << "Created Number Of Tests Vector: " << endl;
+                cout << "Size: " << numberOfTests.size() << endl;
+                cout << endl;
                 Utility::DisplayVector(numberOfTests);
             }
 #endif
@@ -101,13 +90,13 @@ ResultStruct_t *DuckShootingTest::Core()
                 }
                 else {
 
-                    std::vector<std::vector<double>> temp = MatrixFillWith(30, 20, -99.0); /* TODO: Correct this */
+                    vector<vector<double>> temp = MatrixFillWith(30, 20, -99.0); /* TODO: Fix this */
                     for (int i = 0; i < temp.size(); ++i) {
-                        std::vector<std::vector<int>> targets = randi(temp.size(), NUMBER_OF_HUNTERS, 1);
+                        vector<vector<int>> targets = randi(temp.size(), numberOfHunters, 1);
                         for (int nn = 0; nn < temp.size(); ++nn) {
                             uint32_t numberOfEqualIndex = findNumberOfEqualIndexes(targets, nn);
                             if (numberOfEqualIndex) {
-                                vector<double> *tempVector = PRNG_Uniform::getNumbers(numberOfEqualIndex); /* TODO: Correct this usage */
+                                vector<double> *tempVector = PRNG_Uniform::getNumbers(numberOfEqualIndex); /* TODO: Fix this usage */
                                 for (uint32_t os = 0; os < numberOfEqualIndex; ++os) {
                                     temp[nn][os] = (*tempVector)[os]; /* TODO: Find more accurate way */
                                 }
@@ -165,17 +154,13 @@ ResultStruct_t *DuckShootingTest::Core()
     //     end % for ll
     // end % for kk
 
-    //resultStruct->Lam = lam;
-    //resultStruct->P = p;
-    //resultStruct->ResultMatrix = resultMatrix;
+    resultObject->Lam = lam;
+    resultObject->P = p;
+    resultObject->ResultMatrix = resultMatrix;
 #ifndef NDEBUG
-    Utility::DisplayMatrix(resultStruct->ResultMatrix);
+    Utility::DisplayMatrix(resultObject->ResultMatrix);
 #endif
-    return resultStruct;
-
-    // obj.lam = lam;
-    // obj.p   = p;
-    // obj.res = res;
+    return resultObject;
 }
 
 bool DuckShootingTest::PoissonRandom(double)
@@ -184,7 +169,7 @@ bool DuckShootingTest::PoissonRandom(double)
     return true;
 }
 
-std::vector<std::vector<double>> DuckShootingTest::MatrixFillWith(uint32_t numOfRows, uint32_t numOfColmns, double filledWith)
+vector<vector<double>> DuckShootingTest::MatrixFillWith(uint32_t numOfRows, uint32_t numOfColmns, double filledWith)
 {
     vector< double > tempRow;
     vector< vector<double> > onesVector;
@@ -200,11 +185,11 @@ std::vector<std::vector<double>> DuckShootingTest::MatrixFillWith(uint32_t numOf
     return onesVector;
 }
 
-std::vector<std::vector<int>> DuckShootingTest::randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns)
+vector<vector<int>> DuckShootingTest::randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns)
 {
     vector<vector<int>> randomMatrix;
-    std::vector<int> tempRow;
-    std::vector<double> *tempRowDouble;
+    vector<int> tempRow;
+    vector<double> *tempRowDouble;
 
     for (int j = 0; j < numOfRows; ++j) {
         tempRowDouble = PRNG_Uniform::getNumbers(numOfColmns);
@@ -221,7 +206,7 @@ std::vector<std::vector<int>> DuckShootingTest::randi(uint32_t numberRange, uint
     return randomMatrix;
 }
 
-uint32_t DuckShootingTest::findNumberOfEqualIndexes(std::vector<std::vector<int>> &targets, uint32_t nn)
+uint32_t DuckShootingTest::findNumberOfEqualIndexes(vector<vector<int>> &targets, uint32_t nn)
 {
     uint32_t count = 0;
 
