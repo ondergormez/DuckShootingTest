@@ -76,8 +76,8 @@ vector<double> Utility::linspace(double startNumber, double endNumber, uint32_t 
     return(tempLinspace);
 }
 
-vector<double> Utility::setdiff(std::vector<double>a, std::vector<double>b) {
-	vector<double>result;
+vector<uint32_t> Utility::setdiff(std::vector<uint32_t>a, std::vector<uint32_t>b) {
+	vector<uint32_t>result;
 
 	int findFlag = 0;
 

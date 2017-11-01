@@ -18,6 +18,7 @@
 #include "prng_uniform.hh"
 #include <iterator>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 using namespace os_prng_tests::in_progress;
@@ -68,25 +69,6 @@ ResultStruct_t * DuckShootingTest::Core(ResultStruct_t *resultObject)
     //Utility::DisplayVector(lam);
     //Utility::DisplayVector(p);
     //Utility::DisplayMatrix(resultMatrix);
-
-    /*TODO: Delete this test code*/
-    //vector<int> deneme;
-    //vector<vector<int>> localMatrix;
-    //deneme.push_back(3);
-    //deneme.push_back(4);
-    //deneme.push_back(5);
-    //localMatrix.push_back(deneme);
-    //deneme.clear();
-    //deneme.push_back(5);
-    //deneme.push_back(4);
-    //deneme.push_back(4);
-    //localMatrix.push_back(deneme);
-    //deneme.clear();
-    //vector<vector<int>> indexes = findNumberOfEqualIndexes(localMatrix, 4);
-    //uint32_t rowNumber, colNumber;
-
-    //rowNumber = indexes[2][0];
-    //colNumber = indexes[2][1];
 #endif
 
 
@@ -114,25 +96,45 @@ ResultStruct_t * DuckShootingTest::Core(ResultStruct_t *resultObject)
                 }
                 else {
 
-                    temp = MatrixFillWith(poisResult, numberOfHunters, -99.0);
-                    for (int i = 0; i < temp.size(); ++i) {
-                        vector<vector<int>> targets = randi(temp.size(), numberOfHunters, 1);
-                        for (int nn = 0; nn < temp.size(); ++nn) {
-                            uint32_t numberOfEqualIndex = findNumberOfEqualIndexCount(targets, nn);
-                            if (numberOfEqualIndex) {
-                                vector<double> *tempVector = PRNG_Uniform::getNumbers(numberOfEqualIndex); /* TODO: Fix this usage */
-                                for (uint32_t os = 0; os < numberOfEqualIndex; ++os) {
-                                    temp[nn][os] = (*tempVector)[os]; /* TODO: Find more accurate way */
-                                }
-                            }
-                        }
+                    temp = MatrixFillWith(poisResult, numberOfHunters, -99.0); /* TODO: Fix this */
+                   for (int i = 0; i < temp.size(); ++i) {
+                       vector<vector<int>> targets = randi(temp.size(), numberOfHunters, 1);
+                       for (int nn = 0; nn < temp.size(); ++nn) {
+                           uint32_t numberOfEqualIndex = findNumberOfEqualIndexCount(targets, nn);
+                           if (numberOfEqualIndex) {
+                               vector<double> *tempVector = PRNG_Uniform::getNumbers(numberOfEqualIndex); /* TODO: Fix this usage */
+                               for (uint32_t os = 0; os < numberOfEqualIndex; ++os) {
+                                   temp[nn][os] = (*tempVector)[os]; /* TODO: Find more accurate way */
+                               }
+                           }
+                       }
 #ifndef NDEBUG
-                        Utility::DisplayMatrix(temp);
+                       //Utility::DisplayMatrix(temp);
 #endif                        
-                    }
+                   }
                 }
-                vector<double> indicesAll = vector<double>(temp.size());
-                vector<uint32_t> indices_m99;
+                vector<uint32_t> indicesAll = vector<uint32_t>(Utility::numel(temp));
+                for (uint32_t i = 0; i < indicesAll.size(); ++i) {
+                    indicesAll[i] = i;        
+                }
+
+#ifndef NDEBUG
+                /*TODO: Delete this*/
+                /*NOTE: This is a test code for findNumberOfEqualIndexes function.
+                        findNumberOfEqualIndexes implemented same as matlab find function.*/
+                vector<vector<double>> tempMatrix = vector<vector<double>>(3, vector<double>(4));
+                tempMatrix[2][0] = 5;
+                tempMatrix[0][1] = 5;
+                tempMatrix[1][2] = 5;
+                tempMatrix[0][3] = 5;
+                tempMatrix[2][3] = 5;
+                Utility::DisplayMatrix(tempMatrix);
+                vector<uint32_t> indices_m99 = findNumberOfEqualIndexes(tempMatrix, 5);
+                vector<uint32_t> indices_not_m99 = Utility::setdiff(indicesAll, indices_m99); /*TODO: Correct setdiff function*/
+#else
+                vector<uint32_t> indices_m99 = findNumberOfEqualIndexes(temp, -99);
+                vector<uint32_t> indices_not_m99 = Utility::setdiff(indicesAll, indices_m99);
+#endif
             }
         }
     }
@@ -233,26 +235,37 @@ uint32_t DuckShootingTest::findNumberOfEqualIndexCount(vector<vector<int>> &targ
 }
 
 // a = [3, 4, 5;
-//      4, 4, 5];
+//      4, 0, 4];
 // findNumberOfEqualIndexes(a, 4);
-//results = {(0,1), (1, 1), (1,2)}
-vector<vector<int>> DuckShootingTest::findNumberOfEqualIndexes(vector<vector<int32_t>> &targets, uint32_t numberToBeSearched)
+//results = {1, 2, 5}
+vector<uint32_t> DuckShootingTest::findNumberOfEqualIndexes(vector<vector<double>> &targets, double numberToBeSearched)
 {
-    vector<vector<int>> indexMatrix;
-    vector<int> tempCol;
+    // vector<vector<int>> indexMatrix; // NOTE: different method
+    // vector<int> tempCol;
 
-    for (int i = 0; i < targets.size(); ++i) {
-        for (int j = 0; j < targets[0].size(); ++j) {
-            if (targets[i][j] == numberToBeSearched) {
-                tempCol.push_back(i);
-                tempCol.push_back(j);
-                indexMatrix.push_back(tempCol);
-                tempCol.clear();
-            }
-        }
-    }
+    // for (int i = 0; i < targets.size(); ++i) {
+    //     for (int j = 0; j < targets[0].size(); ++j) {
+    //         if (targets[i][j] == numberToBeSearched) {
+    //             tempCol.push_back(i);
+    //             tempCol.push_back(j);
+    //             indexMatrix.push_back(tempCol);
+    //             tempCol.clear();
+    //         }
+    //     }
+    // }
+
+    double epsilon = 0.001;
+    vector<uint32_t> indexVector;
+
+     for (int i = 0; i < targets[0].size(); ++i) {
+         for (int j = 0; j < targets.size(); ++j) {
+             if (abs(targets[j][i] - numberToBeSearched) < epsilon) {
+                indexVector.push_back(i  * targets.size() + j);          /*TODO: Check this with huge array*/
+             }
+         }
+     }
     
-    // vector<int32_t> tempVector;
+    // vector<int32_t> tempVector;  // NOTE: different method test
     // tempVector.push_back(10);
     // tempVector.push_back(20);
     // tempVector.push_back(30);
@@ -263,8 +276,9 @@ vector<vector<int>> DuckShootingTest::findNumberOfEqualIndexes(vector<vector<int
     //     //it = std::find_if(it, tempVector.end(), [&](int32_t num1, int32_t num2) ->
     //         //int { return num1 == num2; } (numberToBeSearched, *it));
     // }
+
     
-    return indexMatrix;
+    return indexVector;
 }
 
 
