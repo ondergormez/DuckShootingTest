@@ -108,6 +108,14 @@ vector<double> Utility::setdiff(std::vector<double>a, std::vector<double>b) {
 			findFlag = 0;
 		}
 	}
-
 	return(result);
 }
+
+unsigned int Utility::numel(std::vector<double> inputParam) {
+	return(inputParam.size());
+}
+
+unsigned int Utility::numel(std::vector<std::vector<double>> inputParam) {
+	return(inputParam.size()*inputParam[0].size());
+}
+
