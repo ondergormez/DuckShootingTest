@@ -75,3 +75,39 @@ vector<double> Utility::linspace(double startNumber, double endNumber, uint32_t 
 
     return(tempLinspace);
 }
+
+vector<double> Utility::setdiff(std::vector<double>a, std::vector<double>b) {
+	vector<double>result;
+
+	int findFlag = 0;
+
+	for (unsigned int i = 0; i < a.size(); ++i) {
+
+		for (unsigned int j = 0; j < b.size(); ++j) {
+			if (a[i] == b[j]) {
+				++findFlag;
+			}
+		}
+
+		if (findFlag == 0) {
+			for (unsigned int k = 0; k < result.size(); ++k) {
+				if (a[i] == result[k]) {
+					++findFlag;
+				}
+			}
+
+			if (findFlag == 0) {
+				result.push_back(a[i]);
+			}
+			else {
+				findFlag = 0;
+			}
+
+		}
+		else {
+			findFlag = 0;
+		}
+	}
+
+	return(result);
+}

@@ -50,6 +50,7 @@ public:
     static void DisplayVector(std::vector<double> &vectorToBeDisplayed);
     static void DisplayMatrix(std::vector<std::vector<double>> &matrixToBeDisplayed);
 	static std::vector<double> linspace(double startNumber, double endNumber, uint32_t nPoints);
+	static std::vector<double> setdiff(std::vector<double>a, std::vector<double>b);
 };
 
 #endif /* __UTILITY__HH__ */
