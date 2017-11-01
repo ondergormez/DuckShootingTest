@@ -16,6 +16,8 @@
 #include "DuckShootingTest.hh"
 #include "Utility.hh"
 #include "prng_uniform.hh"
+#include <iterator>
+#include <algorithm>
 
 using namespace std;
 using namespace os_prng_tests::in_progress;
@@ -48,7 +50,7 @@ DuckShootingTest::~DuckShootingTest()
 /*
  * Core Function
  */
-ResultStruct_t * DuckShootingTest::Core(ResultStruct_t * resultObject)
+ResultStruct_t * DuckShootingTest::Core(ResultStruct_t *resultObject)
 {
     vector<double> numberOfTests = vector<double>(100);
     uint32_t numberOfHunters = 10;
@@ -66,7 +68,28 @@ ResultStruct_t * DuckShootingTest::Core(ResultStruct_t * resultObject)
     //Utility::DisplayVector(lam);
     //Utility::DisplayVector(p);
     //Utility::DisplayMatrix(resultMatrix);
+
+    /*TODO: Delete this test code*/
+    //vector<int> deneme;
+    //vector<vector<int>> localMatrix;
+    //deneme.push_back(3);
+    //deneme.push_back(4);
+    //deneme.push_back(5);
+    //localMatrix.push_back(deneme);
+    //deneme.clear();
+    //deneme.push_back(5);
+    //deneme.push_back(4);
+    //deneme.push_back(4);
+    //localMatrix.push_back(deneme);
+    //deneme.clear();
+    //vector<vector<int>> indexes = findNumberOfEqualIndexes(localMatrix, 4);
+    //uint32_t rowNumber, colNumber;
+
+    //rowNumber = indexes[2][0];
+    //colNumber = indexes[2][1];
 #endif
+
+
 
     for (int kk = 0; kk < lam.size(); ++kk) { /* NOTE: Rows' of resultMatrix*/ /*TODO: Change this with resultMatrix[0].Size()*/
         for (int ll = 0; ll < p.size(); ++ll) { /* NOTE: Columns' of resultMatrix*/ /*TODO: Change this with resultMatrix column size*/
@@ -80,21 +103,22 @@ ResultStruct_t * DuckShootingTest::Core(ResultStruct_t * resultObject)
                 Utility::DisplayVector(numberOfTests);
             }
 #endif
+
             for (int mm = 0; mm < numberOfTests.size(); ++mm) {
+                vector<vector<double>> temp;
 
+                int32_t poisResult = PRNG_Uniform::PoissonRandom(lam[kk]);
 
-
-                uint32_t poisResult = PoissonRandom(lam[kk]); 
                 if (!poisResult) {
                     numberOfTests[mm] = 0.0;
                 }
                 else {
 
-                    vector<vector<double>> temp = MatrixFillWith(30, 20, -99.0); /* TODO: Fix this */
+                    temp = MatrixFillWith(poisResult, numberOfHunters, -99.0);
                     for (int i = 0; i < temp.size(); ++i) {
                         vector<vector<int>> targets = randi(temp.size(), numberOfHunters, 1);
                         for (int nn = 0; nn < temp.size(); ++nn) {
-                            uint32_t numberOfEqualIndex = findNumberOfEqualIndexes(targets, nn);
+                            uint32_t numberOfEqualIndex = findNumberOfEqualIndexCount(targets, nn);
                             if (numberOfEqualIndex) {
                                 vector<double> *tempVector = PRNG_Uniform::getNumbers(numberOfEqualIndex); /* TODO: Fix this usage */
                                 for (uint32_t os = 0; os < numberOfEqualIndex; ++os) {
@@ -106,16 +130,9 @@ ResultStruct_t * DuckShootingTest::Core(ResultStruct_t * resultObject)
                         Utility::DisplayMatrix(temp);
 #endif                        
                     }
-    //                 for nn = 1:size(tmp,1)
-    //                     number = numel( find( targets == nn ) );
-    //                     if number > 0
-    //                         tmp(nn,1:number) = rand(1,number);
-    //                     end
-    //                     clear number;
-    //                 end % for nn
-    //                 clear targets;
                 }
-
+                vector<double> indicesAll = vector<double>(temp.size());
+                vector<uint32_t> indices_m99;
             }
         }
     }
@@ -163,12 +180,6 @@ ResultStruct_t * DuckShootingTest::Core(ResultStruct_t * resultObject)
     return resultObject;
 }
 
-bool DuckShootingTest::PoissonRandom(double)
-{
-     /* TODO: Implement this method same way with poissrnd( lam(kk) ) */
-    return true;
-}
-
 vector<vector<double>> DuckShootingTest::MatrixFillWith(uint32_t numOfRows, uint32_t numOfColmns, double filledWith)
 {
     vector< double > tempRow;
@@ -206,13 +217,13 @@ vector<vector<int>> DuckShootingTest::randi(uint32_t numberRange, uint32_t numOf
     return randomMatrix;
 }
 
-uint32_t DuckShootingTest::findNumberOfEqualIndexes(vector<vector<int>> &targets, uint32_t nn)
+uint32_t DuckShootingTest::findNumberOfEqualIndexCount(vector<vector<int>> &targets, uint32_t numberToBeSearched)
 {
     uint32_t count = 0;
 
     for (int i = 0; i < targets.size(); ++i) {
         for (int j = 0; j < targets[0].size(); ++j) {
-            if (targets[i][j] == nn) {
+            if (targets[i][j] == numberToBeSearched) {
                 ++count;
             }
         }
@@ -220,6 +231,45 @@ uint32_t DuckShootingTest::findNumberOfEqualIndexes(vector<vector<int>> &targets
     
     return count;
 }
+
+// a = [3, 4, 5;
+//      4, 4, 5];
+// findNumberOfEqualIndexes(a, 4);
+//results = {(0,1), (1, 1), (1,2)}
+vector<vector<int>> DuckShootingTest::findNumberOfEqualIndexes(vector<vector<int32_t>> &targets, uint32_t numberToBeSearched)
+{
+    vector<vector<int>> indexMatrix;
+    vector<int> tempCol;
+
+    for (int i = 0; i < targets.size(); ++i) {
+        for (int j = 0; j < targets[0].size(); ++j) {
+            if (targets[i][j] == numberToBeSearched) {
+                tempCol.push_back(i);
+                tempCol.push_back(j);
+                indexMatrix.push_back(tempCol);
+                tempCol.clear();
+            }
+        }
+    }
+    
+    // vector<int32_t> tempVector;
+    // tempVector.push_back(10);
+    // tempVector.push_back(20);
+    // tempVector.push_back(30);
+
+    // uint32_t counter = 0;
+    // vector<uint32_t>::iterator myIterator;
+    // for (auto it = tempVector.begin(); it != tempVector.end(); ++it, ++counter) {
+    //     //it = std::find_if(it, tempVector.end(), [&](int32_t num1, int32_t num2) ->
+    //         //int { return num1 == num2; } (numberToBeSearched, *it));
+    // }
+    
+    return indexMatrix;
+}
+
+
+
+
 
 // classdef duck_shooting_test < ee_solns_demos.testers.GenericTester
 

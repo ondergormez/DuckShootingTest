@@ -64,9 +64,9 @@ private:
 public:
     DuckShootingTest(uint32_t numberOfDucks);
     ~DuckShootingTest();
-    bool PoissonRandom(double);
     std::vector<std::vector<int>> randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns);
-    uint32_t findNumberOfEqualIndexes(std::vector<std::vector<int>> &targets, uint32_t nn);
+    uint32_t findNumberOfEqualIndexCount(std::vector<std::vector<int>> &targets, uint32_t numberToBeSearched);
+    std::vector<std::vector<int>> findNumberOfEqualIndexes(std::vector<std::vector<int>> &targets, uint32_t numberToBeSearched);
     std::vector<std::vector<double>> MatrixFillWith(uint32_t numOfRows, uint32_t numOfColmns, double filledWith);
 };
 

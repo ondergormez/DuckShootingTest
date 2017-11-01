@@ -18,7 +18,7 @@ namespace os_prng_tests
 #else
         uniform_real_distribution<double> PRNG_Uniform::distribution(0.0, 1.0);
 #endif
-            void PRNG_Uniform::ChangeSeed(void)
+            void PRNG_Uniform::ChangeSeed(default_random_engine &generator)
             {
                 seed = chrono::high_resolution_clock::now().time_since_epoch().count();
                 generator.seed(seed);
@@ -26,7 +26,7 @@ namespace os_prng_tests
 
             std::vector<double> * PRNG_Uniform::getNumbers(unsigned int howMany)
             {
-                ChangeSeed();
+                ChangeSeed(generator);
                 using namespace std;
 
                 vector<double> *current = new vector<double> ();
@@ -46,7 +46,7 @@ namespace os_prng_tests
 
             void PRNG_Uniform::getNumbers(std::vector<double> & current, unsigned int howMany)
             {
-                ChangeSeed();
+                ChangeSeed(generator);
                 using namespace std;
 
                 current.clear();
@@ -58,6 +58,17 @@ namespace os_prng_tests
                     current.push_back(distribution(generator));
 #endif
                 }
+            }
+
+            int32_t PRNG_Uniform::PoissonRandom(double number)
+            {
+                /* TODO: Implement this method same way with poissrnd( lam(kk) ) */
+                //return true;
+                std::default_random_engine generator;
+                ChangeSeed(generator);
+                std::poisson_distribution<int> distribution(number);
+
+                return distribution(generator);
             }
     }
 }

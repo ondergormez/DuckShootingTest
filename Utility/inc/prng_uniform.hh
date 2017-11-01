@@ -33,13 +33,14 @@ namespace os_prng_tests
 #else
             static std::uniform_real_distribution<double> distribution;
 #endif
-            static void ChangeSeed(void);
+            static void ChangeSeed(std::default_random_engine &generator);
             PRNG_Uniform() {}
             ~PRNG_Uniform() {}
 
         public:
             static std::vector<double> * getNumbers(unsigned int howMany);
             static void getNumbers(std::vector<double> & current, unsigned int howMany);
+            static int32_t PoissonRandom(double number);
         };
     }
 }
