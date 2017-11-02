@@ -47,8 +47,13 @@ private:
 public:
     Utility();
     ~Utility();
-    static void DisplayVector(std::vector<double> &vectorToBeDisplayed);
-    static void DisplayMatrix(std::vector<std::vector<double>> &matrixToBeDisplayed);
+    
+    template<typename Type>
+    static void DisplayVector(std::vector<Type> &vectorToBeDisplayed);
+
+    template<typename Type>
+    static void DisplayMatrix(std::vector<std::vector<Type>> &matrixToBeDisplayed);
+
 	static std::vector<double> linspace(double startNumber, double endNumber, uint32_t nPoints);
 	static std::vector<uint32_t> setdiff(std::vector<uint32_t>a, std::vector<uint32_t>b);
 	static unsigned int numel(std::vector<double> inputParam);
