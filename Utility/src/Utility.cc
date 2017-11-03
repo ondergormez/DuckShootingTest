@@ -36,48 +36,6 @@ Utility::~Utility()
 
 }
 
-/*
- * Display Vector
- */
-template<typename Type>
-void Utility::DisplayVector(vector<Type> &vectorToBeDisplayed)
-{
-    cout << "Size: " << vectorToBeDisplayed.size() << endl;
-    for (uint32_t i = 0; i < vectorToBeDisplayed.size(); ++i)
-        cout << vectorToBeDisplayed[i] << " ";
-    cout << endl;
-    cout << endl;
-}
-
-template<typename Type>
-void DisplayVector(vector<Type> &vectorToBeDisplayed)
-{
-    cout << "Size: " << vectorToBeDisplayed.size() << endl;
-    for (uint32_t i = 0; i < vectorToBeDisplayed.size(); ++i)
-        cout << vectorToBeDisplayed[i] << " ";
-    cout << endl;
-    cout << endl;
-}
-
-/*
- * Display Matrix
- */
-template<typename Type>
-void Utility::DisplayMatrix(vector<vector<Type>> &matrixToBeDisplayed)
-{
-    cout << "A " << matrixToBeDisplayed.size() << " * " <<
-    matrixToBeDisplayed[0].size() << " matrix will be displayed:" << endl;
-    
-    for (uint32_t i = 0; i < matrixToBeDisplayed.size(); ++i) {
-        for (uint32_t k = 0; k < matrixToBeDisplayed[i].size(); ++k) {
-            cout << matrixToBeDisplayed[i][k] << " ";
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
-
-
 vector<double> Utility::linspace(double startNumber, double endNumber, uint32_t nPoints){
     vector<double> tempLinspace;
 

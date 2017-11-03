@@ -47,12 +47,37 @@ private:
 public:
     Utility();
     ~Utility();
-    
-    template<typename Type>
-    static void DisplayVector(std::vector<Type> &vectorToBeDisplayed);
 
+    /*
+    * Display Vector
+    */
     template<typename Type>
-    static void DisplayMatrix(std::vector<std::vector<Type>> &matrixToBeDisplayed);
+    static void DisplayVector(std::vector<Type> &vectorToBeDisplayed)
+    {
+        cout << "Size: " << vectorToBeDisplayed.size() << endl;
+        for (uint32_t i = 0; i < vectorToBeDisplayed.size(); ++i)
+            cout << vectorToBeDisplayed[i] << " ";
+        cout << endl;
+        cout << endl;
+    };
+
+    /*
+    * Display Matrix
+    */
+    template<typename Type>
+    static void DisplayMatrix(std::vector<std::vector<Type>> &matrixToBeDisplayed)
+    {
+        cout << "A " << matrixToBeDisplayed.size() << " * " <<
+            matrixToBeDisplayed[0].size() << " matrix will be displayed:" << endl;
+
+        for (uint32_t i = 0; i < matrixToBeDisplayed.size(); ++i) {
+            for (uint32_t k = 0; k < matrixToBeDisplayed[i].size(); ++k) {
+                cout << matrixToBeDisplayed[i][k] << " ";
+            }
+            cout << endl;
+        }
+        cout << endl;
+    };
 
 	static std::vector<double> linspace(double startNumber, double endNumber, uint32_t nPoints);
 	static std::vector<uint32_t> setdiff(std::vector<uint32_t>a, std::vector<uint32_t>b);
