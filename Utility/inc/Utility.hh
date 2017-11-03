@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <vector>
+#include <iomanip>
 
 /*
 * Note:
@@ -56,7 +57,7 @@ public:
     {
         cout << "Size: " << vectorToBeDisplayed.size() << endl;
         for (uint32_t i = 0; i < vectorToBeDisplayed.size(); ++i)
-            cout << vectorToBeDisplayed[i] << " ";
+            cout << std::setprecision(3) << left << std::setw(7) << vectorToBeDisplayed[i] << " ";
         cout << endl;
         cout << endl;
     };
@@ -72,7 +73,7 @@ public:
 
         for (uint32_t i = 0; i < matrixToBeDisplayed.size(); ++i) {
             for (uint32_t k = 0; k < matrixToBeDisplayed[i].size(); ++k) {
-                cout << matrixToBeDisplayed[i][k] << " ";
+                cout << std::setprecision(3) << left << std::setw(7) << matrixToBeDisplayed[i][k];
             }
             cout << endl;
         }

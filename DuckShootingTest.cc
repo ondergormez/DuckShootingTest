@@ -118,32 +118,16 @@ ResultStruct_t * DuckShootingTest::Core(ResultStruct_t *resultObject)
                     indicesAll[i] = i;        
                 }
 
-#ifndef NDEBUG
-                /*TODO: Delete this*/
-                /*NOTE: This is a test code for findNumberOfEqualIndexes function.
-                        findNumberOfEqualIndexes implemented same as matlab find function.*/
-                vector<vector<double>> tempMatrix = vector<vector<double>>(3, vector<double>(4));
-                tempMatrix[2][0] = 5;
-                tempMatrix[0][1] = 5;
-                tempMatrix[1][2] = 5;
-                tempMatrix[0][3] = 5;
-                tempMatrix[2][3] = 5;
-                Utility::DisplayMatrix<double>(tempMatrix);
-                vector<uint32_t> indices_m99 = findNumberOfEqualIndexes(tempMatrix, 5);
-                vector<uint32_t> indices_not_m99 = Utility::setdiff(indicesAll, indices_m99); /*TODO: Correct setdiff function*/
-
-#else
                 Utility::DisplayMatrix<double>(temp);
-                
+
                 vector<uint32_t> indices_m99 = findNumberOfEqualIndexes(temp, -99);
-                Utility::DisplayVector<uint32_t> (indices_m99);
-                
+                Utility::DisplayVector<uint32_t>(indices_m99);
+
                 vector<uint32_t> indices_not_m99 = Utility::setdiff(indicesAll, indices_m99);
                 Utility::DisplayVector<uint32_t>(indices_not_m99);
-                
+
                 vector<uint32_t> indices_one = findNumberOfWithInRangeIndexes(temp, 0.0, p[ll]);
                 Utility::DisplayVector<uint32_t>(indices_one);
-#endif
             }
         }
     }
