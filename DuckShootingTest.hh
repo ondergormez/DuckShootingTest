@@ -66,7 +66,7 @@ public:
     ~DuckShootingTest();
     std::vector<std::vector<int>> randi(uint32_t numberRange, uint32_t numOfRows, uint32_t numOfColmns);
     uint32_t findNumberOfEqualIndexCount(std::vector<std::vector<int>> &targets, uint32_t numberToBeSearched);
-    std::vector<uint32_t> findNumberOfEqualIndexes(std::vector<std::vector<double>> &targets, double numberToBeSearched);
+    std::vector<std::vector<double>::iterator> findNumberOfEqualIndexes(std::vector<std::vector<double>> &targets, double numberToBeSearched);
     std::vector<uint32_t> findNumberOfWithInRangeIndexes(std::vector<std::vector<double>> &targets, double greaterOrEqualThan, double lessThan);
     std::vector<std::vector<double>> MatrixFillWith(uint32_t numOfRows, uint32_t numOfColmns, double filledWith);
 };

@@ -113,58 +113,67 @@ ResultStruct_t * DuckShootingTest::Core(ResultStruct_t *resultObject)
 #endif                        
                    }
                 }
-                vector<uint32_t> indicesAll = vector<uint32_t>(Utility::numel(temp));
-                for (uint32_t i = 0; i < indicesAll.size(); ++i) {
-                    indicesAll[i] = i;        
-                }
+
+                // vector<uint32_t> indicesAll = vector<uint32_t>(Utility::numel(temp));
+                // for (uint32_t i = 0; i < indicesAll.size(); ++i) {
+                //     indicesAll[i] = i;        
+                // }
 
                 Utility::DisplayMatrix<double>(temp);
 
-                vector<uint32_t> indices_m99 = findNumberOfEqualIndexes(temp, -99);
-                Utility::DisplayVector<uint32_t>(indices_m99);
+                double epsilon = 0.001;
 
-                vector<uint32_t> indices_not_m99 = Utility::setdiff(indicesAll, indices_m99);
-                Utility::DisplayVector<uint32_t>(indices_not_m99);
+                vector<vector<double>::iterator> indices_m99;
 
-                vector<uint32_t> indices_one = findNumberOfWithInRangeIndexes(temp, 0.0, p[ll]);
-                Utility::DisplayVector<uint32_t>(indices_one);
+                for (int i = 0; i < temp.size(); ++i) {
+                    auto it = temp[i].begin();
+                    while (it != temp[i].end()) {
+                        it = std::find_if(it, temp[i].end(), [&](double num) ->
+                            bool {
+                                    if (abs(num - (-99)) < epsilon) { // num ?= -99
+                                        //*it = 0.0; // TODO: uncomment this
+                                        return true;
+                                    }
+                                    else if ((num >= 0.0) && (num < p[ll])) {
+                                        *it = 1.0;
+                                        return true;
+                                    }
+                                    else {
+                                        //*it = 0.0; // TODO: uncomment this
+                                        *it = -98.0; // TODO: Delete this
+                                        return false;
+                                    }
+                                });
+                        if (it == temp[i].end())
+                            break;
+                        it++;
+                        //myIteratorVector.push_back(it++);
+                    }
+                }
+                
+                Utility::DisplayMatrix<double>(temp);
+                int a = 0;
+                a = 1;
+
+                // vector<vector<double>::iterator> indices_m99 = findNumberOfEqualIndexes(temp, -99);
+                // cout << "indices_m99 Vector:" << endl;
+                //Utility::DisplayVector<uint32_t>(indices_m99);
+
+                //vector<uint32_t> indices_not_m99 = Utility::setdiff(indicesAll, indices_m99);
+                //cout << "indices_not_m99 Vector:" << endl;
+                //Utility::DisplayVector<uint32_t>(indices_not_m99);
+
+                //vector<uint32_t> indices_one = findNumberOfWithInRangeIndexes(temp, 0.0, p[ll]);
+                //cout << "indices_one Vector:" << endl;
+                //Utility::DisplayVector<uint32_t>(indices_one);
+
+                //vector<uint32_t> indices_zero = Utility::setdiff(indices_not_m99, indices_one);
+                //cout << "indices_zero Vector:" << endl;
+                //Utility::DisplayVector<uint32_t>(indices_zero);
+
             }
         }
     }
-    // for kk = 1:size(res,1)
-    //     for ll = 1:size(res,2)
-    //         for mm = 1:noTests
-
-    //             if isempty(tmp)
-    //             else
-    //                 targets = randi( size(tmp,1) , noHunters , 1 );
-    //                 for nn = 1:size(tmp,1)
-    //                     number = numel( find( targets == nn ) );
-    //                     if number > 0
-    //                         tmp(nn,1:number) = rand(1,number);
-    //                     end
-    //                     clear number;
-    //                 end % for nn
-    //                 clear targets;
-    //             end
-    //             indices_all     = 1:numel(tmp);
-    //             indices_m99     = find( tmp == -99 );
-    //             indices_not_m99 = setdiff( indices_all , indices_m99 );
-    //             indices_one     = find( (tmp >= 0.0) & (tmp < p(ll)) );
-    //             indices_zero    = setdiff( indices_not_m99 , indices_one );
-                
-    //             tmp( indices_one )  = 1;
-    //             tmp( indices_zero ) = 0;
-    //             tmp( indices_m99 )  = 0;
-                
-    //             tests(mm) = numel( find( sum(tmp,2) > 0 ) );
-                
-    //             clear tmp;
-    //         end % for mm
-    //         res(kk,ll) = sum(tests) / numel(tests);
-    //         clear tests;
-    //     end % for ll
-    // end % for kk
 
     resultObject->Lam = lam;
     resultObject->P = p;
@@ -231,47 +240,25 @@ uint32_t DuckShootingTest::findNumberOfEqualIndexCount(vector<vector<int>> &targ
 //      4, 0, 4];
 // findNumberOfEqualIndexes(a, 4);
 //results = {1, 2, 5}
-vector<uint32_t> DuckShootingTest::findNumberOfEqualIndexes(vector<vector<double>> &targets, double numberToBeSearched)
+vector<vector<double>::iterator> DuckShootingTest::findNumberOfEqualIndexes(vector<vector<double>> &targets, double numberToBeSearched)
 {
-    // vector<vector<int>> indexMatrix; // NOTE: different method
-    // vector<int> tempCol;
-
-    // for (int i = 0; i < targets.size(); ++i) {
-    //     for (int j = 0; j < targets[0].size(); ++j) {
-    //         if (targets[i][j] == numberToBeSearched) {
-    //             tempCol.push_back(i);
-    //             tempCol.push_back(j);
-    //             indexMatrix.push_back(tempCol);
-    //             tempCol.clear();
-    //         }
-    //     }
-    // }
-
     double epsilon = 0.001;
-    vector<uint32_t> indexVector;
 
-     for (int i = 0; i < targets[0].size(); ++i) {
-         for (int j = 0; j < targets.size(); ++j) {
-             if (abs(targets[j][i] - numberToBeSearched) < epsilon) {
-                indexVector.push_back(i  * targets.size() + j);          /*TODO: Check this with huge array*/
-             }
-         }
-     }
-    
-    // vector<int32_t> tempVector;  // NOTE: different method test
-    // tempVector.push_back(10);
-    // tempVector.push_back(20);
-    // tempVector.push_back(30);
+    vector<vector<double>::iterator> myIteratorVector;
 
-    // uint32_t counter = 0;
-    // vector<uint32_t>::iterator myIterator;
-    // for (auto it = tempVector.begin(); it != tempVector.end(); ++it, ++counter) {
-    //     //it = std::find_if(it, tempVector.end(), [&](int32_t num1, int32_t num2) ->
-    //         //int { return num1 == num2; } (numberToBeSearched, *it));
-    // }
+    for (int i = 0; i < targets.size(); ++i) {
+        auto it = targets[i].begin();
+        while (it != targets[i].end()) {
+            it = std::find_if(it, targets[i].end(), [&](double num) ->
+                bool { return abs(num - numberToBeSearched) < epsilon; });
+            if (it == targets[i].end())
+                break;
+            myIteratorVector.push_back(it++);
+        }
 
-    
-    return indexVector;
+    }
+
+    return myIteratorVector;
 }
 
 vector<uint32_t> DuckShootingTest::findNumberOfWithInRangeIndexes(vector<vector<double>> &targets, double greaterOrEqualThan, double lessThan)

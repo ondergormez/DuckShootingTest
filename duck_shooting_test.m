@@ -67,31 +67,48 @@ classdef duck_shooting_test < ee_solns_demos.testers.GenericTester
 function core(obj)
 
 format long e
-rng('shuffle','twister')
+rng('shuffle','twister')   //
 
+//10 000 test sayısı olacak, 100 eski kod için geçerli 
 noTests = 1e2;
 
+//hunter sabit olacak ve 10 olacak
 noHunters = 10;
 
+
+
+//Lin space diye bir komut var C++ onu kullan
 lam = linspace( 3 , 8 , 31 );
-p   = linspace( 0.05 , 0.95 , 31 );
+p   = linspace( 0.05 , 0.95 , 31 ); //avcı başarı oranı
 
 res = zeros( numel(lam) , numel(p) );
 
-for kk = 1:size(res,1) //satir sayisini ifade ediyor
-    for ll = 1:size(res,2) //sutun sayisini ifade ediyor
+
+//her for loop içinde paralelleştirme yapılacak, threadler için mutex kullanılacak index erişimi için. 
+//matrix tanımı için iç içe std:vector kullanabiliriz.  
+
+for kk = 1:size(res,1)
+    for ll = 1:size(res,2)
         tests = zeros( 1 , noTests );
         for mm = 1:noTests
         
-            tmp = -99 * ones( poissrnd( lam(kk) ) , noHunters );
+		    //poisson random sınıfı yaz, burası değişken üretmeli, problem çikabilir
+		    //poissrnd c++ STD kütüphanesinde var, şimdilik sabit rakam verip devam et. tmp = 20 tane ördek gibi
+            tmp = -99 * ones( poissrnd( lam(kk) ) , noHunters );  //ördek sayısı
             
             if isempty(tmp)
                 tests(mm) = 0;
-            else
-                targets = randi( size(tmp,1) , noHunters , 1 );
-                for nn = 1:size(tmp,1) //satırların sayısını ifade ediyor
+            else   //hangi ordeğe hangi hunter nişan alıyor
+                targets = randi( size(tmp,1) , noHunters , 1 );   //tmp burda hangi ördek hangi hunter tarafından nişan alınmış onu gösteriyor
+																   //matrix sınıfı tanımla, matrix işlemi var yoğun
+                for nn = 1:size(tmp,1)
+				     
+					//find_if C++  kullanabilir, lambda expression lazım olabilir. 
+					//find ile tek tek bulup indexleri geri döndürmek lazım. 
                     number = numel( find( targets == nn ) );
                     if number > 0
+					    //Nişan alan varsa hangi olasılıkla vuracak?
+						//uniform 0 ile 1 arasında döndürecek
                         tmp(nn,1:number) = rand(1,number);
                     end
                     clear number;
@@ -101,13 +118,17 @@ for kk = 1:size(res,1) //satir sayisini ifade ediyor
             indices_all     = 1:numel(tmp);
             indices_m99     = find( tmp == -99 );
             indices_not_m99 = setdiff( indices_all , indices_m99 );
+			//0 ile P(LL) olasılık arasında ise vurulmuş 
             indices_one     = find( (tmp >= 0.0) & (tmp < p(ll)) );
+			//indexler açısından fark kümesini hesaplıyor, C++ var araştır. 
             indices_zero    = setdiff( indices_not_m99 , indices_one );
             
             tmp( indices_one )  = 1;
             tmp( indices_zero ) = 0;
             tmp( indices_m99 )  = 0;
             
+			//her satırda vurulma olasılıklarını topla eğer satır değeri 0'dan büyükse ördek vurulmuştur. Sonra vurulan ördek sayılarını 
+			//toplayarak toplam değeri bulacağiz.
             tests(mm) = numel( find( sum(tmp,2) > 0 ) );
             
             clear tmp;
